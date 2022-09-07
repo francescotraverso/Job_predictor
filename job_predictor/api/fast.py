@@ -18,7 +18,7 @@ app.add_middleware(
 )
 """
 # replace this with user dropdown menu choice
-area_choice = 'data science'
+area_choice = 'ICT
 
 # replace with user CV
 describe_your_job = '
@@ -40,8 +40,8 @@ def job_titles(describe_your_job, area_choice):
     new_description = preprocess_input(
         new_description,
         area_keywords,
-        area_kw_insert=False,
-        area_kw_insert_ratio=0.7)
+        area_kw_insert=True,
+        area_kw_insert_ratio=0.3)
 
     bert_model, all_corpus_embed = load_bert()
 
