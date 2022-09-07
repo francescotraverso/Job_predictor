@@ -1,57 +1,7 @@
 import string
-import pandas as pd
-from gensim.models.phrases import Phrases, ENGLISH_CONNECTOR_WORDS
-from gensim.models.doc2vec import TaggedDocument
-import nltk
 from nltk import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-
-
-def create_corpus(df_occ_n_skills):
-
-    # create corpus from dataframe
-    X_all = pd.concat(
-        [df_occ_n_skills['description_input'],
-         df_occ_n_skills['skills_input']]
-        ).reset_index(drop=True)
-
-    return X_all
-
-
-def read_corpus(corpus):
-    # create a usable corpus from a dataframe
-
-    # instantiate Phraser outside of the loop
-    sentence_stream = [entry.split(" ") for entry in corpus]
-    bigrams = Phrases(
-        sentence_stream,
-        min_count=5,
-        threshold=5,
-        connector_words=ENGLISH_CONNECTOR_WORDS)
-
-    for i, line in enumerate(corpus):
-
-        # remove punctuation
-        for punctuation in string.punctuation:
-            sentence = line.replace(punctuation, '')
-
-        # remove stopwords
-        stop_words = set(stopwords.words('english'))
-        tokens = word_tokenize(sentence)
-        stopword_free_tokens = \
-            [token for token in tokens if token not in stop_words]
-        sentence = ' '.join(stopword_free_tokens)
-
-        # lemmatize
-        sentence = WordNetLemmatizer().lemmatize(sentence, pos='n')
-        sentence = WordNetLemmatizer().lemmatize(sentence, pos='v')
-
-        # get bigrams
-        sent = sentence.split()
-
-        # yield tagged final corpus
-        yield TaggedDocument(bigrams[sent], [i])
 
 
 def preprocess_input(
@@ -72,12 +22,10 @@ def preprocess_input(
                 Data Science keywords!')
 
         insertion_amount = int(len(sent_split) * area_kw_insert_ratio)
-        insertion_counter = 0
 
         for insertion in range(insertion_amount):
             if len(sent_split) * area_kw_insert_ratio <= len(area_keywords):
-                sent_split.append(area_keywords[insertion_counter])
-                insertion_counter += 1
+                sent_split.append(area_keywords[insertion])
 
         sentence = ' '.join(sent_split)
 

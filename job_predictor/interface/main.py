@@ -4,7 +4,7 @@ from job_predictor.ml_logic.preprocessor import truncate_description
 from job_predictor.ml_logic.model import load_bert, run_bert
 
 # replace this with user dropdown menu choice
-area_choice = 'data science'
+area_choice = 'ICT'
 
 # replace with user CV
 describe_your_job = """
@@ -22,8 +22,8 @@ new_description = truncate_description(
 new_description = preprocess_input(
     new_description,
     area_keywords,
-    area_kw_insert=False,
-    area_kw_insert_ratio=0.7)
+    area_kw_insert=True,
+    area_kw_insert_ratio=0.2)
 
 bert_model, all_corpus_embed = load_bert()
 

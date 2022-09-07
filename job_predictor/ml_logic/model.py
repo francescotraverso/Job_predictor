@@ -10,10 +10,10 @@ def load_bert():
     read_path = '/'.join(os.path.realpath(__file__).split('/')[0:-3]) + \
         '/model/'
 
-    filename = read_path + 'bert_model.sav'
+    filename = read_path + 'bert_model_22.sav'
     bert_model = pickle.load(open(filename, 'rb'))
 
-    filename = read_path + 'all_corpus_embed.sav'
+    filename = read_path + 'all_corpus_embed_22.sav'
     all_corpus_embed = pickle.load(open(filename, 'rb'))
 
     return bert_model, all_corpus_embed
@@ -47,7 +47,12 @@ def run_bert(
         else:
             new_index = sim_rank_ind[i] - len(df_occ_n_skills)
 
-        print(f'RANK #{i+1}: ' + df_occ_n_skills.loc[new_index]['job_title'])
+        original_job_title = df_occ_n_skills.loc[new_index]['job_title']
+
+        if 'senior' in original_job_title:
+            original_job_title = original_job_title.replace('senior ', '')
+
+        print(f'RANK #{i+1}: ' + original_job_title)
         # print(df_occ_n_skills.loc[new_index]['description'])    don't show JD
         print(f'Similarity score: \
             {round(sim_rank[0][sim_rank_ind[i]]*100,1)} % \n')
@@ -57,7 +62,7 @@ def run_bert_api(
         all_corpus_embed,
         new_description,
         df_occ_n_skills,
-        n_jobs=10):
+        n_jobs=5):
 
     # run the preloaded BERT model
     new_description_embed = bert_model.encode(new_description)
@@ -78,9 +83,14 @@ def run_bert_api(
         else:
             new_index = sim_rank_ind[i] - len(df_occ_n_skills)
 
+        original_job_title = df_occ_n_skills.loc[new_index]['job_title']
+
+        if 'senior' in original_job_title:
+            original_job_title = original_job_title.replace('senior ', '')
+
         dict_key = 'Job #' + str(i + 1)
         api_output_dict[dict_key] = { \
-            'Title': df_occ_n_skills.loc[new_index]['job_title'],
+            'Title': original_job_title,
             'Proximity Score': round(sim_rank[0][sim_rank_ind[i]]*100,1)}
 
     return api_output_dict
