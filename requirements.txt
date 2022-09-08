@@ -6,3 +6,4 @@ sklearn
 nltk
 numpy
 sentence_transformers
+torch

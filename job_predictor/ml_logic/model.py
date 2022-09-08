@@ -10,10 +10,10 @@ def load_bert():
     read_path = '/'.join(os.path.realpath(__file__).split('/')[0:-3]) + \
         '/model/'
 
-    filename = read_path + 'bert_model_22.sav'
+    filename = read_path + 'bert_model.sav'
     bert_model = pickle.load(open(filename, 'rb'))
 
-    filename = read_path + 'all_corpus_embed_22.sav'
+    filename = read_path + 'all_corpus_embed.sav'
     all_corpus_embed = pickle.load(open(filename, 'rb'))
 
     return bert_model, all_corpus_embed
