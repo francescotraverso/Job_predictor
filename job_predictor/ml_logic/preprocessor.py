@@ -1,7 +1,7 @@
 import string
 from nltk import word_tokenize
-from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from job_predictor.ml_logic.nltkmodules import stopwords
 
 
 def preprocess_input(
@@ -40,15 +40,15 @@ def preprocess_input(
     sentence = ''.join(char for char in sentence if not char.isdigit())
 
     # remove stopwords
-    stop_words = set(stopwords.words('english'))
+    stop_words = stopwords
     tokens = word_tokenize(sentence)
     stopword_free_tokens = \
         [token for token in tokens if token not in stop_words]
     sentence = ' '.join(stopword_free_tokens)
 
-    # lemmatize
-    sentence = WordNetLemmatizer().lemmatize(sentence, pos='n')
-    sentence = WordNetLemmatizer().lemmatize(sentence, pos='v')
+    # lemmatize --- disabled!
+    # sentence = WordNetLemmatizer().lemmatize(sentence, pos='n')
+    # sentence = WordNetLemmatizer().lemmatize(sentence, pos='v')
 
     return sentence
 
